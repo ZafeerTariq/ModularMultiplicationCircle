@@ -5,14 +5,13 @@
 
 #include "imgui/imgui.h"
 #include "imgui/imgui-SFML.h"
-#include "line.h"
 
 #define SCREEN_WIDTH 1600
 #define SCREEN_HEIGHT 900
 
 #define TAU 6.28318530718
 
-int getPoint( int N, int i, float k ) {
+int getPoint( int N, int i, int k ) {
 	return ( i * k ) % N;
 }
 
