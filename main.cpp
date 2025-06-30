@@ -27,13 +27,16 @@ int main() {
 	float speed = 1;
 
 	int N = 100;
-	float k = 2;
+	float k = 0;
 	float radius = SCREEN_HEIGHT / 3.0f;
 	sf::Vector2f center( SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f );
 
 	sf::CircleShape circle( radius, 500 );
 	circle.setOrigin( radius, radius );
 	circle.setPosition( center );
+	circle.setOutlineThickness( 2 );
+	circle.setOutlineColor( sf::Color( 255, 140, 17 ) );
+	circle.setFillColor( sf::Color::Transparent );
 
 	while( window.isOpen() ) {
 		sf::Event event;
@@ -66,7 +69,7 @@ int main() {
 			ImGui::Checkbox( "animate", &animate );
 		ImGui::End();
 
-		window.clear( sf::Color( 14, 26, 37 ) );
+		window.clear( sf::Color( 33, 22, 40 ) );
 		window.draw( circle );
 
 		for( size_t i = 0; i < N; i++ ) {
@@ -76,8 +79,8 @@ int main() {
 			sf::Vector2f b( center.x + radius * cos( angle ), center.y + radius * sin( angle ) );
 
 			sf::Vertex line[] = {
-				sf::Vertex( a, sf::Color::Red ),
-				sf::Vertex( b, sf::Color::Red )
+				sf::Vertex( a, sf::Color( 254, 17, 85 ) ),
+				sf::Vertex( b, sf::Color( 50, 184, 251 ) )
 			};
 			window.draw( line, 2, sf::Lines );
 		}
