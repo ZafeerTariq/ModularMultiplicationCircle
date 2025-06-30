@@ -11,10 +11,6 @@
 
 #define TAU 6.28318530718
 
-int getPoint( int N, int i, int k ) {
-	return ( i * k ) % N;
-}
-
 int main() {
 	const char* title = "Modular Multiplication Circle";
 	sf::RenderWindow window( sf::VideoMode( SCREEN_WIDTH, SCREEN_HEIGHT ), title );
@@ -26,6 +22,8 @@ int main() {
 	sf::Clock clock;
 	sf::Time dt;
 
+	bool intOnly = false;
+
 	int N = 100;
 	float k = 2;
 	float radius = SCREEN_HEIGHT / 3.0f;
@@ -34,8 +32,6 @@ int main() {
 	sf::CircleShape circle( radius, 500 );
 	circle.setOrigin( radius, radius );
 	circle.setPosition( center );
-
-	std::vector<sf::Vector2f> points;
 
 	while( window.isOpen() ) {
 		sf::Event event;
@@ -52,24 +48,32 @@ int main() {
 		ImGui::Begin( "Menu" );
 			ImGui::DragInt( "N", &N );
 			if( N < 0 ) N = 0;
-			ImGui::DragFloat( "k", &k, 0.01f );
-			if( k < 0 ) k = 0;
+
+			if( intOnly ) {
+				k = (int)k;
+				ImGui::DragFloat( "k", &k, 1 );
+				if( k < 0 ) k = 0;
+			}
+			else {
+				ImGui::DragFloat( "k", &k, 0.01f );
+				if( k < 0 ) k = 0;
+			}
+
+			ImGui::Checkbox( "int only", &intOnly );
 		ImGui::End();
 
 		window.clear( sf::Color( 14, 26, 37 ) );
 		window.draw( circle );
 
-		points.clear();
 		for( size_t i = 0; i < N; i++ ) {
-			sf::Vector2f point( center.x + radius * cos( TAU * i / N ), center.y + radius * sin( TAU * i / N ) );
-			points.push_back( point );
-		}
-		for( size_t i = 0; i < N; i++ ) {
-			int p = getPoint( N, i, k );
+			float angle = TAU * i / N;
+			sf::Vector2f a( center.x + radius * cos( angle ), center.y + radius * sin( angle ) );
+			angle = TAU * i * k / N;
+			sf::Vector2f b( center.x + radius * cos( angle ), center.y + radius * sin( angle ) );
 
 			sf::Vertex line[] = {
-				sf::Vertex( points[i], sf::Color::Red ),
-				sf::Vertex( points[p], sf::Color::Red )
+				sf::Vertex( a, sf::Color::Red ),
+				sf::Vertex( b, sf::Color::Red )
 			};
 			window.draw( line, 2, sf::Lines );
 		}
