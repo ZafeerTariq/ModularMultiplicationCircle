@@ -23,6 +23,8 @@ int main() {
 	sf::Time dt;
 
 	bool intOnly = false;
+	bool animate = false;
+	float speed = 1;
 
 	int N = 100;
 	float k = 2;
@@ -59,7 +61,9 @@ int main() {
 				if( k < 0 ) k = 0;
 			}
 
+			ImGui::SliderFloat( "animation speed", &speed, 0.1, 20 );
 			ImGui::Checkbox( "int only", &intOnly );
+			ImGui::Checkbox( "animate", &animate );
 		ImGui::End();
 
 		window.clear( sf::Color( 14, 26, 37 ) );
@@ -78,6 +82,10 @@ int main() {
 			window.draw( line, 2, sf::Lines );
 		}
 
+		if( animate ) {
+			intOnly = false;
+			k += 0.01 * dt.asSeconds() * speed;
+		}
 		ImGui::SFML::Render( window );
 		window.display();
 	}
